@@ -12,7 +12,7 @@ type KeyValue struct {
 	key, left, right string
 }
 
-// Print outputs the left and right value to stdout
+// Print diff status to stdout
 func (k *KeyValue) Print() {
 	var l, r string
 	var c *color.Color
@@ -51,7 +51,6 @@ func checkNotEmpty(str string) bool {
 func split(str string) map[string]string {
 	m := make(map[string]string)
 	kvs := strings.Split(strings.Trim(str, "? "), "&")
-	//res := make([]*string, len(kvs))
 
 	for _, part := range kvs {
 		eq := strings.Index(part, "=")
@@ -63,28 +62,10 @@ func split(str string) map[string]string {
 	return m
 }
 
-func appendKey(keys []*string, newKey string) []*string {
-	if len(keys)+1 > cap(keys) {
-		// Double the capacity, if needed (+1 if cap is 0)
-		new := make([]*string, len(keys), (cap(keys)*2)+1)
-		for i := range keys {
-			new[i] = keys[i]
-		}
-		keys = new
-	}
-
-	// Re-slice keys in order to add new key
-	end := len(keys)
-	keys = keys[:end+1]
-	keys[end] = &newKey
-
-	return keys
-}
-
 func getUniqueKeys(list []string) []*string {
 	m := make(map[string]bool)
 
-	// Amateur set
+	// Makeshift Set type
 	for _, k := range list {
 		m[k] = true
 	}
@@ -121,7 +102,7 @@ func buildResultList(left, right string) map[string]*KeyValue {
 	return m
 }
 
-// Diff compares two query strings and returns a map of key to KeyValues
+// Diff compares two query strings and returns a map of key => KeyValues
 func Diff(a, b string) map[string]*KeyValue {
 	checkNotEmpty(a)
 	checkNotEmpty(b)
