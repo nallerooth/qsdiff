@@ -30,6 +30,6 @@ The tool also supports printing the result to the terminal. Values will be
 printed in green or red, depending on whether they match or not.
 ```go
 for _, v := range qsdiff.Diff(strA, strB) {
-    v.Print()
+    v.Print(ignoreMatching) // bool: whether to print matching values
 }
 ```

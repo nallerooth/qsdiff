@@ -18,11 +18,15 @@ type KeyValue struct {
 }
 
 // Print diff status to stdout
-func (k *KeyValue) Print() {
+func (k *KeyValue) Print(ignoreMatches bool) {
 	var c *color.Color
 	var l, r string
 
 	if k.left == k.right {
+		if ignoreMatches {
+			return
+		}
+
 		c = color.New(color.FgGreen)
 	} else {
 		c = color.New(color.FgRed)
