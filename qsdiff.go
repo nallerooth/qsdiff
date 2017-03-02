@@ -7,6 +7,11 @@ import (
 	"github.com/fatih/color"
 )
 
+const (
+	keyWidth = 10
+	colWidth = 35
+)
+
 // KeyValue stores for key, left and right values
 type KeyValue struct {
 	key, left, right string
@@ -14,28 +19,32 @@ type KeyValue struct {
 
 // Print diff status to stdout
 func (k *KeyValue) Print() {
-	var l, r string
 	var c *color.Color
+	var l, r string
 
-	if l = k.left; k.left == "" {
-		l = "-"
-	}
-	if r = k.right; k.right == "" {
-		r = "-"
-	}
-
-	if l == r {
+	if k.left == k.right {
 		c = color.New(color.FgGreen)
 	} else {
 		c = color.New(color.FgRed)
 	}
 
-	fmt.Printf("%s\t", k.key)
-	c.Printf("%s%s\n", padRight(l, 40), padRight(r, 40))
+	if l = k.left; l == "" {
+		l = "<nil>"
+	}
+
+	if r = k.right; r == "" {
+		r = "<nil>"
+	}
+
+	fmt.Printf("%s", padRight(k.key, keyWidth))
+	c.Printf("%s%s\n", padRight(l, colWidth), padRight(r, colWidth))
 	color.Unset()
 }
 
 func padRight(s string, l int) string {
+	if l-len(s) < 0 {
+		return s
+	}
 	return s + strings.Repeat(" ", l-len(s))
 }
 
